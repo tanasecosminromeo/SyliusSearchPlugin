@@ -191,6 +191,15 @@ class Search extends AbstractIndex
             $query['aggs'] = AggregationHelper::buildAggregations($gridConfig->getFilters());
         }
 
+        //TODO: Find a reliable solution for this
+        $query['min_score'] = 5;
+        $query['query']['bool']['must']['nested']['query']['bool']['should']['rank_feature']['boost'] = 1;
+        $query['query']['bool']['must']['nested']['query']['bool']['must']['multi_match']['fuzziness'] = 1;
+
+        if (isset($query['sort'])){
+            $query['sort'] = "_score";
+        }
+
         return $query;
     }
 
