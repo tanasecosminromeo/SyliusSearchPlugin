@@ -25,7 +25,7 @@ class AggregationHelper
      *
      * @return array
      */
-    public static function buildAggregation(string $field): array
+    public static function buildAggregation(string $field, int $maxSize = 50): array
     {
         return [
             'filter' => [
@@ -35,11 +35,14 @@ class AggregationHelper
                             'term' => ['attributes.code' => $field],
                         ],
                     ],
-                ],
+                ]
             ],
             'aggs' => [
                 'values' => [
-                    'terms' => ['field' => 'attributes.value.keyword'],
+                    'terms' => [
+                        'field' => 'attributes.value.keyword',
+                        'size' => $maxSize
+                    ],
                 ],
             ],
         ];
